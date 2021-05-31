@@ -7,7 +7,7 @@
 
 ### 3、ollvm str混淆解决的例子unidbg_tools/unidbg-android/src/test/java/com/ollvm/DestrTest.java
 
-### 3、trace打印寄存器每一步的变化流程的例子unidbg_tools/unidbg-android/src/test/java/com/tracedemo/TraceTest.java
+### 4、trace打印寄存器每一步的变化流程的例子unidbg_tools/unidbg-android/src/test/java/com/tracedemo/TraceTest.java
 
 trace打印效果如下
 ~~~
