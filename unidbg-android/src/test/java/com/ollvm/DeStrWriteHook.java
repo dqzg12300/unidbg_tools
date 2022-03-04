@@ -5,6 +5,8 @@ import com.github.unidbg.arm.backend.Backend;
 import com.github.unidbg.arm.backend.BackendException;
 import com.github.unidbg.arm.backend.WriteHook;
 import com.github.unidbg.listener.TraceWriteListener;
+import javafx.util.Pair;
+import trace.OtherTools;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ class DeStrWriteHook implements WriteHook {
     }
     PrintStream redirect;
     TraceWriteListener traceWriteListener;
-    public Map<Long,byte[]> dstr_datas=new HashMap<Long,byte[]>();
+    public Map<Long, Pair<byte[],byte[]>> dstr_datas=new HashMap<Long,Pair<byte[],byte[]>>();
 
     /**
      * long类型转byte[] (大端)
@@ -68,8 +70,13 @@ class DeStrWriteHook implements WriteHook {
                 //将写入的地址和写入的数据保存下来
                 byte[] writedata=longToBytesLittle(value);
                 byte[] resizeWriteData=new byte[size];
-                System.arraycopy(writedata,0,resizeWriteData,0,size);
-                dstr_datas.put(address,resizeWriteData);
+                byte[] buff=emulator.getBackend().mem_read(address,size);
+                String src= OtherTools.byteToString(buff);
+                String dest=OtherTools.byteToString(resizeWriteData);
+                if(!src.equals(dest)){
+                    System.arraycopy(writedata,0,resizeWriteData,0,size);
+                    dstr_datas.put(address,new Pair(resizeWriteData,buff));
+                }
             }
         } catch (BackendException e) {
             throw new IllegalStateException(e);
